@@ -1,4 +1,4 @@
-var TIMEOUT_IN_SECS = 10
+var TIMEOUT_IN_SECS = 3 * 60
 var TIMEOUT_TO_NOTICE = 30
 var TEMPLATE = '<h1><span class="js-timer-minutes">00</span>:<span class="js-timer-seconds">00</span></h1>'
 var NOTICE_ARRAY = ['Баловством хлеба не добудешь', 'Без труда не выловишь рыбку из пруда', 'Всякая работа мастера хвалит', 'Деревья смотри в плодах, а людей смотри в делах', 'Есть терпенье, будет и уменье']
