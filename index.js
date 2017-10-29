@@ -1,11 +1,18 @@
-var TIMEOUT_IN_SECS = 3 * 60
+var TIMEOUT_IN_SECS = 10
+var TIMEOUT_TO_NOTICE = 30
 var TEMPLATE = '<h1><span class="js-timer-minutes">00</span>:<span class="js-timer-seconds">00</span></h1>'
+var NOTICE_ARRAY = ['Баловством хлеба не добудешь', 'Без труда не выловишь рыбку из пруда', 'Всякая работа мастера хвалит', 'Деревья смотри в плодах, а людей смотри в делах', 'Есть терпенье, будет и уменье']
 
 function padZero(number){
   return ("00" + String(number)).slice(-2);
 }
 
+function pickRandomNotice(noticeArray) {
+  return noticeArray[Math.floor(Math.random() * noticeArray.length)]
+}
+
 class Timer{
+
   // IE does not support new style classes yet
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
   constructor(timeout_in_secs){
@@ -39,7 +46,7 @@ class Timer{
       return this.timeout_in_secs
     var currentTimestamp = this.getTimestampInSecs()
     var secsGone = currentTimestamp - this.timestampOnStart
-    return Math.max(this.timeout_in_secs - secsGone, 0)
+    return this.timeout_in_secs - secsGone
   }
 }
 
@@ -56,7 +63,8 @@ class TimerWidget{
     // adds HTML tag to current page
     this.timerContainer = document.createElement('div')
 
-    this.timerContainer.setAttribute("style", "height: 100px;")
+    this.timerContainer.classList.add('timer-div')
+    this.timerContainer.setAttribute("style", "padding: 5px;border: 2px solid #4d7284;border-radius: 5rem;position: fixed;color: #f5f5f5;top: 10px;right: 10px;z-index: 1000;background: rgba(143, 179, 205, 0.82);font-size: 1.5rem;")
     this.timerContainer.innerHTML = TEMPLATE
 
     rootTag.insertBefore(this.timerContainer, rootTag.firstChild)
@@ -90,7 +98,25 @@ function main(){
 
   function handleIntervalTick(){
     var secsLeft = timer.calculateSecsLeft()
-    timerWiget.update(secsLeft)
+    var showSecs = getShowSecs(secsLeft)
+    if (secsLeft <= 0)
+      timerDiv.style.background = "red"
+
+    if (isNoticeShow(secsLeft))
+      alert(pickRandomNotice(NOTICE_ARRAY))
+    timerWiget.update(showSecs)
+  }
+
+  function getShowSecs(secsLeft) {
+    if (secsLeft <= 0)
+      return 0
+    return secsLeft
+  }
+
+  function isNoticeShow(secsLeft) {
+    if (secsLeft >= 0)
+      return false
+    return !(secsLeft % TIMEOUT_TO_NOTICE)
   }
 
   function handleVisibilityChange(){
@@ -104,10 +130,20 @@ function main(){
     }
   }
 
+
   // https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API
   document.addEventListener("visibilitychange", handleVisibilityChange, false);
-  handleVisibilityChange()
+    handleVisibilityChange()
+
+  var timerDiv = document.querySelector('.timer-div')
+  timerDiv.addEventListener('click', function () {
+    timerDiv.style.background = "rgba(143, 179, 205, 0.82)"
+    timer.reset()
+    timer.start()
+  })
 }
+
+
 
 // initialize timer when page ready for presentation
 window.addEventListener('load', main)
