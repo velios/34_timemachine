@@ -1,7 +1,11 @@
 var TIMEOUT_IN_SECS = 3 * 60
 var TIMEOUT_TO_NOTICE = 30
 var TEMPLATE = '<h1><span class="js-timer-minutes">00</span>:<span class="js-timer-seconds">00</span></h1>'
-var NOTICE_ARRAY = ['Баловством хлеба не добудешь', 'Без труда не выловишь рыбку из пруда', 'Всякая работа мастера хвалит', 'Деревья смотри в плодах, а людей смотри в делах', 'Есть терпенье, будет и уменье']
+var NOTICE_ARRAY = ['Баловством хлеба не добудешь',
+                    'Без труда не выловишь рыбку из пруда',
+                    'Всякая работа мастера хвалит',
+                    'Деревья смотри в плодах, а людей смотри в делах',
+                    'Есть терпенье, будет и уменье']
 
 function padZero(number){
   return ("00" + String(number)).slice(-2);
@@ -64,7 +68,9 @@ class TimerWidget{
     this.timerContainer = document.createElement('div')
 
     this.timerContainer.classList.add('timer-div')
-    this.timerContainer.setAttribute("style", "padding: 5px;border: 2px solid #4d7284;border-radius: 5rem;position: fixed;color: #f5f5f5;top: 10px;right: 10px;z-index: 1000;background: rgba(143, 179, 205, 0.82);font-size: 1.5rem;")
+    this.timerContainer.setAttribute("style", "padding: 5px;border: 2px solid #4d7284;border-radius: 5rem;
+                                     position: fixed;color: #f5f5f5;top: 10px;right: 10px;z-index: 1000;
+                                     background: rgba(143, 179, 205, 0.82);font-size: 1.5rem;")
     this.timerContainer.innerHTML = TEMPLATE
 
     rootTag.insertBefore(this.timerContainer, rootTag.firstChild)
